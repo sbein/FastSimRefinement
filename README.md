@@ -2,6 +2,14 @@
 
 This repo contains the basic code needed to process samples needed for refinement studies and to look at results produced by Moritz, Nils, and others. 
 
+#Check out the repo
+```
+cmsrel CMSSW_12_2_3
+cd CMSSW_12_2_3/src/
+cmsenv
+
+git clone https://github.com/sbein/FastSimRefinement
+
 ## Make synchronized FastSim-FullSim jet and event trees:
 
 as a small  test

@@ -527,7 +527,6 @@ def main():
            container_Mht_GenSplice[0] = mhtgensplice.Pt() 
            container_Mht_Gen[0] = mhtgen.Pt()        
            container_Mht_GenSmear[0] = mhtgensmear.Pt()
-               
            tEvent.Fill()                        
   
           

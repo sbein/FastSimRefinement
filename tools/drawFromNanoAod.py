@@ -4,7 +4,6 @@ from shared_utils import *
 gStyle.SetOptStat(0)
 import os, sys
 
-
 '''
 =================================1-1 compare:
 rm jobs/*
@@ -38,16 +37,35 @@ python3 tools/drawFromNanoAod.py "/nfs/dust/cms/user/beinsam/FastSim/VisitCaloRe
 python3 tools/drawFromNanoAod.py "/nfs/dust/cms/user/beinsam/FastSim/VisitCaloResponse/DevDecay/CMSSW_12_2_X_2022-07-10-0000/src/T1tttt/Fast/*/step3_inNANOAODSIM.root,/nfs/dust/cms/user/beinsam/FastSim/VisitCaloResponse/DevDecay/CMSSW_12_2_X_2022-07-10-0000/src/T1tttt/FastGenDecays/*/step3_inNANOAODSIM.root"
 
 rm -rf pdfs/T1tttt
+python3 tools/drawFromNanoAod.py "/nfs/dust/cms/user/beinsam/FastSim/Refinement/Backport2Decayer/CMSSW_12_4_X_2023-05-16-2300/src/T1tttt/Fast/*/*NANO*.root,/nfs/dust/cms/user/beinsam/FastSim/VisitCaloResponse/DevDecay/CMSSW_12_2_X_2022-07-10-0000/src/T1tttt/FastGenDecays/*/step3_inNANOAODSIM.root"
 python3 tools/drawFromNanoAod.py "/nfs/dust/cms/user/beinsam/FastSim/VisitCaloResponse/CMSSW_12_2_3/src/T1tttt/Fast/*/step3_inNANOAODSIM.root,/nfs/dust/cms/user/beinsam/FastSim/VisitCaloResponse/CMSSW_12_2_3/src/TTbar/FastEstatMean"
-#...
 
-rm -rf ~/www/FastSim/Nano/6July2022/
+#..
+
+#Check FastSim/FastSim differences (first set obvious flag to True below), then adjust:
+rm -rf pdfs/T1tttt_Fast_C106XvsC10630
+nohup python3 tools/drawFromNanoAod.py "/nfs/dust/cms/user/beinsam/FastSim/Refinement/Backport2Decayer/CMSSW_10_6_30/src/T1tttt/Fast/*/*NANO*.root,/nfs/dust/cms/user/beinsam/FastSim/Refinement/Backport2Decayer/CMSSW_10_6_X_2023-04-30-0000/src/T1tttt/Fast/*/*NANO*.root" &
+rm -rf ~/www/FastSim/Nano/T1tttt_Fast_C106XvsC10630
+cp -r pdfs/T1tttt_Fast_C106XvsC10630 ~/www/FastSim/Nano/T1tttt_Fast_C106XvsC10630
+#...
+python3 tools/drawFromNanoAod.py "/nfs/dust/cms/user/beinsam/FastSim/Yash/CMSSW_14_1_X_2024-03-28-1100/src/T1ttttRun3/Fast/*/*NANO.root,/nfs/dust/cms/user/beinsam/FastSim/Yash/CMSSW_14_1_X_2024-03-28-1100/src/T1ttttRun3/Fast10e6/*/*NANO.root"
+ 
+#run 3 NANO validation
+python3 tools/drawFromNanoAod.py "/nfs/dust/cms/user/beinsam/FastSim/Refinement/CMSSW_12_6_0/src/TTbarRun3/Fast/*/*NANO.root"
+
+rm -rf ~/www/FastSim/Nano/6July2022/TTbar_HeadVsFastEstatMeanGenDecays
 cp -r pdfs/T1tttt ~/www/FastSim/Nano/6July2022/T1tttt_9_4_11
 cp -r pdfs/TTbar ~/www/FastSim/Nano/6July2022/TTbar_12_2_XDev
 cp -r pdfs/T1tttt ~/www/FastSim/Nano/6July2022/T1tttt_12_2_XDev
 cp -r pdfs/TTbar ~/www/FastSim/Nano/6July2022/TTbar_9_4_11
 cp -r pdfs/MuGun1100 ~/www/FastSim/Nano/6July2022/MuGun1100
 cp -r pdfs/MuGun1200 ~/www/FastSim/Nano/6July2022/MuGun1200
+cp -r pdfs/TTbarRun3 ~/www/FastSim/Nano/6July2022/TTbarRun3_12_6_0
+cp -r pdfs/T1tttt_Fast_C124X ~/www/FastSim/Nano/T1tttt_Fast_C124X
+cp -r pdfs/T1tttt_Fast_C124Xmore ~/www/FastSim/Nano/T1tttt_Fast_C124Xmore
+
+cp -r pdfs/T1ttttRun3_Fast_C14X/* ~/www/FastSim/Nano/T1ttttRun3_Fast_C14X/
+
 python /afs/desy.de/user/b/beinsam/www/dir_indexer.py /afs/desy.de/user/b/beinsam/www/FastSim/Nano -r -t /afs/desy.de/user/b/beinsam/www/templates/default.html
 python tools/bigindexer.py "/afs/desy.de/user/b/beinsam/www/FastSim/Nano/"
 ====================================
@@ -55,7 +73,6 @@ python tools/bigindexer.py "/afs/desy.de/user/b/beinsam/www/FastSim/Nano/"
 
 #try to locally develop multi-filer with the goal that it doesnt break using it for simple fast/full comparisons with identical commands as before
 python3 tools/drawFromNanoAod.py "/nfs/dust/cms/user/beinsam/FastSim/VisitCaloResponse/CMSSW_12_2_3/src/TTbar/Fast/*/step3_inNANOAODSIM.root,/nfs/dust/cms/user/beinsam/FastSim/VisitCaloResponse/CMSSW_12_2_3/src/TTbar/FastEstatMean"
-
 
 '''
 
@@ -67,14 +84,17 @@ module use -a /afs/desy.de/group/cms/modulefiles/
 module load cmssw
 export THISDIR=$PWD
 echo "$QUEUE $JOB $HOST"
-cd /nfs/dust/cms/user/beinsam/FastSim/Refinement/CMSSW_12_2_3/src
+cd /nfs/dust/cms/user/beinsam/FastSim/Yash/CMSSW_14_1_X_2024-03-28-1100/src
 cmsenv 
+cd /nfs/dust/cms/user/beinsam/FastSim/Refinement/CMSSW_12_2_3/src
 cd ../../
 python3 tools/drawFromNanoAod.py "ARG1" "ARG2"
 '''
 
-batchmode = True
+batchmode = True #usually on
 istest = False
+dopdfs = False
+IsFastFast = True
 #python tools/whiphtml.py "pdfs/*.png"
 #gROOT.SetBatch(1)
 
@@ -92,18 +112,27 @@ except:
 try: drawarg = sys.argv[2]
 except: drawarg = ''
 
+print('inputnames', inputnames)
 filesfast = glob(inputnames)
-filesfull = glob(inputnames.replace('/Fast/','/Full/'))
+if IsFastFast: filesfull = glob(inputnames)
+else: filesfull = glob(inputnames.replace('/Fast/','/Full/').replace('/FastGenDecays/','/Full/'))
+if istest:
+    filesfast = filesfast[:10]
+    filesfull = filesfull[:10]    
 
+print('len(filesfast)', len(filesfast))
 
 print ('altdirs', altdirs)
 fileslistsalt = []
 #for altdir in altdirs: fileslistsalt.append(glob(inputnames.replace('/Fast/','/'+altdir.split('/')[-1]+'/')))
-for altdir in altdirs: fileslistsalt.append(glob(altdir))
+for altdir in altdirs: 
+    if istest: fileslistsalt.append(glob(altdir)[:10])
+    else: fileslistsalt.append(glob(altdir))
 
 
-firstfname = filesfast[0]
-processname = inputnames.split('CMSSW')[-1].split('/')[2]
+#processname = inputnames.split('CMSSW')[-1].split('/')[2]+'_Fast_C124Xmore'
+processname = inputnames.split('CMSSW')[-1].split('/')[2]+'_Fast_C14X'
+print('processname', processname)
 #processname = 'None'
 #if 'TTbar' in firstfname: processname = 'TTbar'
 #if 'T1tttt' in firstfname: processname = 'T1tttt'
@@ -111,6 +140,10 @@ processname = inputnames.split('CMSSW')[-1].split('/')[2]
 if not os.path.exists('pdfs/'+processname):
     os.system('mkdir -p '+'pdfs/'+processname)
 
+if IsFastFast and len(fileslistsalt)>0:
+    filesfast = fileslistsalt[0]
+    fileslistsalt = fileslistsalt[1:]
+    
 chainfast = TChain('Events')
 for ifile, f in enumerate(filesfast):
     if ifile<10: print ('adding', f, 'to fast', '...')
@@ -121,13 +154,13 @@ for ifile, f in enumerate(filesfull):
     if ifile<10: print ('adding', f, 'to full', '...')
     chainfull.Add(f)
     #if ifile>1000: break
-
+    
 chainsalt = []
 for filelist in fileslistsalt:
     chainsalt.append(TChain('Events'))
     for ifile, f in enumerate(filelist):
         if ifile<10: print ('adding', f, 'to alt', '...')
-        chainsalt[-1].Add(f)    
+        chainsalt[-1].Add(f)
     
 #if len(chainsalt)>0: print ('alt chain gonna have', chainsalt[-1].GetEntries(), 'entries')
 
@@ -156,6 +189,8 @@ for name in bnames:
     if 'Nested' in name: continue
     if 'Electron_convVeto' in name: continue
     if 'Electron_cutBased_HEEP' in name: continue
+    if istest:
+        if not 'MET' in name: continue
     easiername = name.replace('/','Over').replace('(','LPar').replace(')','RPar')
     print ('now doin', name, easiername)
     
@@ -182,34 +217,41 @@ for name in bnames:
         name2draw = 'min('+name+',1999)'
         print ('updated name to', name2draw)
     else: name2draw = name
-    chainfull.Draw(name2draw)
+    nfull = chainfull.GetEntries()
+    print('gonna draw', name2draw)
+    chainfull.Draw(name2draw,'1.0/'+str(nfull))
     histfull = chainfull.GetHistogram().Clone('h'+easiername+'_FullSim')
-    histfull.SetTitle('FullSim')    
+    if IsFastFast: histfull.SetTitle('FastSim') 
+    else: histfull.SetTitle('FullSim')    
     #histoStyler(histfull, kBlack)
     histoStylerBigLabels(histfull, kBlack)
     histfull.GetXaxis().SetRange(0, histfull.GetNbinsX() + 1)
     histfull.SetLineWidth(3)
+    #histfull.SetMarkerSize(2)
 
     histfast = histfull.Clone('h'+easiername+'_FastSim')
-    histfast.SetTitle('FastSim')
+    if IsFastFast: histfast.SetTitle('FastSim (alt)')
+    else: histfast.SetTitle('FastSim')
     histfast.Reset()
     histfast.GetXaxis().SetTitle(histfast.GetXaxis().GetTitle().replace('_pt',' p_{T} [GeV]').replace('_eta',' #eta').replace('_phi',' #phi').replace('_mass',' mass'))
-    chainfast.Draw(name2draw+'>>'+histfast.GetName(),'','same')
+    nfast = chainfast.GetEntries()
+    chainfast.Draw(name2draw+'>>'+histfast.GetName(),'1.0/'+str(nfast),'same')
     #histoStyler(histfast, kOrange+1)
     histoStylerBigLabels(histfast, kOrange+1)
+    histfast.SetLineWidth(3)
     histfast.GetXaxis().SetRange(0, histfast.GetNbinsX() + 1)
 
-    leg = mklegend(x1=.49, y1=.46, x2=.89, y2=.62, color=kWhite)
+    leg = mklegend(x1=.51, y1=.51, x2=.93, y2=.76, color=kWhite)
     c1 = mkcanvas('c_'+easiername)
     hratio, hpromptmethodsyst = FabDraw(c1,leg,histfast,[histfull],datamc=datamc,lumi='x', title = '', LinearScale=False, fractionthing='Fast / Full')
     pad1, pad2 = hpromptmethodsyst[-2:]
     hratio.SetDirectory(0)
     hratio.GetXaxis().SetTitleSize(0.2)
-    hratio.GetXaxis().SetLabelSize(0.18)
+    hratio.GetXaxis().SetLabelSize(0.17)
     hratio.GetXaxis().SetTitleOffset(0.9)    
     
-    hratio.GetYaxis().SetTitleSize(0.2)
-    hratio.GetYaxis().SetLabelSize(0.18)    
+    hratio.GetYaxis().SetTitleSize(0.18)
+    hratio.GetYaxis().SetLabelSize(0.17)    
     hratio.GetYaxis().SetTitleOffset(0.26)
     
     histsalt = []
@@ -220,7 +262,8 @@ for name in bnames:
         histalt.Reset()
         print ('alt chain', chainalt, 'has entries', chainalt.GetEntries())
         histalt.GetXaxis().SetTitle(histalt.GetXaxis().GetTitle().replace('_pt',' p_{T} [GeV]').replace('_eta',' #eta').replace('_phi',' #phi').replace('_mass',' mass'))
-        chainalt.Draw(name2draw+'>>'+histalt.GetName(),'','same')
+        nalt = chainalt.GetEntries()
+        chainalt.Draw(name2draw+'>>'+histalt.GetName(),'1.0/'+str(nalt),'same')
         #histoStyler(histalt, kOrange+1)
         histoStylerBigLabels(histalt, kViolet)
         histsalt.append(histalt)
@@ -244,7 +287,8 @@ for name in bnames:
         pad2.Update()        
         c1.Update()    
         pause()
-    c1.Print('pdfs/'+processname+'/'+name+'.png')
+    if dopdfs: c1.Print('pdfs/'+processname+'/'+name+'.pdf')
+    else: c1.Print('pdfs/'+processname+'/'+name+'.png')
     
 if not batchmode: print ('just created', fnew.GetName())
 

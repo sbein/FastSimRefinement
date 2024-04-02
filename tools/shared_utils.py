@@ -14,7 +14,7 @@ cmsTextOffset = 0.1
 regularfont = 42
 originalfont = tl.GetTextFont()
 epsi = "#scale[1.3]{#font[122]{e}}"
-epsilon = 0.0001
+epsilon = 0.00001
 
 
 def histoStyler(h,color=kBlack):
@@ -22,7 +22,7 @@ def histoStyler(h,color=kBlack):
     h.SetLineColor(color)
     h.SetMarkerColor(color)
     #h.SetFillColor(color)
-    size = 0.077
+    size = 0.075
     font = 132
     h.GetXaxis().SetLabelFont(font)
     h.GetYaxis().SetLabelFont(font)
@@ -275,6 +275,8 @@ def FabDraw(cGold,leg,hTruth,hComponents,datamc='MC',lumi=35.9, title = '', Line
     pad1.cd()
     for ih in range(1,len(hComponents[1:])+1):
         hComponents[ih].Add(hComponents[ih-1])
+        hComponents[ih].SetFillStyle(1001)
+        hComponents[ih].SetFillColor(hComponents[ih].GetLineColor())
     hComponents.reverse()        
     if abs(hComponents[0].Integral(-1,999)-1)<0.001:
         hComponents[0].GetYaxis().SetTitle('Normalized')
@@ -298,9 +300,10 @@ def FabDraw(cGold,leg,hTruth,hComponents,datamc='MC',lumi=35.9, title = '', Line
     hTruth.SetTitle('')
     hComponents[0].SetTitle('')
     if LinearScale: hComponents[0].GetYaxis().SetRangeUser(0, 1.5*hTruth.GetMaximum())
-    else: hComponents[0].GetYaxis().SetRangeUser(0.001, 100*hTruth.GetMaximum())
+    else: hComponents[0].GetYaxis().SetRangeUser(0.06*hTruth.GetMinimum(0.01), 100*hTruth.GetMaximum())
+    hComponents[0].SetFillStyle(1001)
+    hComponents[0].SetFillColor(hComponents[0].GetLineColor())   
     hComponents[0].Draw('hist')
-
     for h in hComponents[1:]: 
         h.Draw('hist same')
         cGold.Update()
@@ -308,10 +311,10 @@ def FabDraw(cGold,leg,hTruth,hComponents,datamc='MC',lumi=35.9, title = '', Line
     hTruth.Draw('p same')
     hTruth.Draw('e same')    
     cGold.Update()
-    hComponents[0].Draw('axis same')           
+    hComponents[0].Draw('axis same') 
     leg.Draw()        
     cGold.Update()
-    stamp2(lumi,datamc)
+    #stamp2(lumi,datamc)
     cGold.Update()
     cGold.cd()
     pad2 = TPad("pad2", "pad2", 0, 0.05, 1, 0.4)
@@ -380,10 +383,6 @@ def FabDrawSystyRatio(cGold,leg,hTruth,hComponents,datamc='MC',lumi=35.9, title 
     hTruth.GetYaxis().SetTitle('Normalized')
     hTruth.GetYaxis().SetTitleOffset(1.15)
     hTruth.SetMarkerStyle(20)
-    histheight = 1.5*max(hComponents[0].GetMaximum(),hTruth.GetMaximum())
-    if LinearScale: low, high = 0, histheight
-    else: low, high = max(0.001,max(hComponents[0].GetMinimum(),hTruth.GetMinimum())), 1000*histheight
-
     title0 = hTruth.GetTitle()
     if datamc=='MC':
         for hcomp in hComponents: leg.AddEntry(hcomp,hcomp.GetTitle(),'lf')

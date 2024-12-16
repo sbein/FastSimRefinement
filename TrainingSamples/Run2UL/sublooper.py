@@ -30,7 +30,7 @@ with open("job_list.txt", "w") as job_list:
             fsh.write("\n")
             fsh.write("# Set up the CMS environment\n")
             fsh.write("source /cvmfs/cms.cern.ch/cmsset_default.sh\n")
-            fsh.write("cd /nfs/dust/cms/user/beinsam/FastSim/Refinement/TrainingSamples/Run2UL\n")
+            fsh.write("cd /nfs/dust/cms/user/beinsam/FastSim/Refinement/FastSimRefinement/TrainingSamples/Run2UL\n")
             fsh.write("\n")
             fsh.write("# Run the simulation wrapper script\n")
             fsh.write(f"./runWrapper.sh {FRAG_BASE} {SIM_TYPE} {seed} {NUM_EVENTS}\n")

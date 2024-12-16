@@ -5,7 +5,7 @@
 #PBS -j oe               # Combine standard output and error
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-cd /nfs/dust/cms/user/beinsam/FastSim/Refinement/TrainingSamples/Run2UL
+cd /nfs/dust/cms/user/beinsam/FastSim/Refinement/FastSimRefinement/TrainingSamples/Run2UL
 
 PROCESS=$1
 SIM_TYPE=$2

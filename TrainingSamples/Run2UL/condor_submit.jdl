@@ -1,0 +1,16 @@
+universe                = vanilla
+executable              = $(job_script)
+arguments               = $(PROCESS) $(SIM_TYPE) $(SEED) $(NUM_EVENTS)
+output                  = logs/$(PROCESS)_$(SEED).out
+error                   = logs/$(PROCESS)_$(SEED).err
+log                     = logs/$(PROCESS)_$(SEED).log
+request_memory          = 8 GB
+request_cpus            = 2
+request_disk            = 4 GB
+transfer_input_files    = runWrapper.sh, runFullSim.sh
+request_runtime         = 14400
+should_transfer_files   = YES
+when_to_transfer_output = ON_EXIT
+getenv                  = true
+queue job_script, PROCESS, SIM_TYPE, SEED, NUM_EVENTS from job_list.txt
+

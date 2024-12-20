@@ -55,10 +55,12 @@ JOB_START=$(date +%s)
 # Determine which stage to run
 for stage in NanoAOD MiniAOD RECO HLT DIGI SIM GEN; do
     # Determine the index of the current stage
-    CURRENT_STAGE_INDEX=$(echo "NanoAOD MiniAOD RECO HLT DIGI SIM GEN" | tr ' ' '\n' | grep -n "^$stage$" | cut -d: -f1)
-    PREVIOUS_STAGE_INDEX=$((CURRENT_STAGE_INDEX))
+    PREVIOUS_STAGE_INDEX=$(echo "NanoAOD MiniAOD RECO HLT DIGI SIM GEN" | tr ' ' '\n' | grep -n "^$stage$" | cut -d: -f1)    
+    CURRENT_STAGE_INDEX=$((PREVIOUS_STAGE_INDEX-1))
     
-    if [ "$stage" == "GEN" ] &&[ -f "${OUTPUT_FILES[${CURRENT_STAGE_INDEX}]}" ]; then
+    echo "checking stage $CURRENT_STAGE_INDEX and for output file called ${OUTPUT_FILES[${CURRENT_STAGE_INDEX}]}"
+    echo "meanwhile previous stage is $PREVIOUS_STAGE_INDEX and for output file called ${OUTPUT_FILES[${PREVIOUS_STAGE_INDEX}]}"    
+    if [ "$stage" == "NanoAOD" ] &&[ -f "${OUTPUT_FILES[${CURRENT_STAGE_INDEX}]}" ]; then
         echo "NANO exists, so skipping: ${OUTPUT_FILES[${CURRENT_STAGE_INDEX}]}"
         break
     fi
@@ -81,6 +83,11 @@ for stage in NanoAOD MiniAOD RECO HLT DIGI SIM GEN; do
         # Run the cmsDriver command
         eval ${COMMANDS[$stage]}
 
+        if [ ! "$stage" == "GEN" ]; then
+            echo "Delete the input file for this stage ${OUTPUT_FILES[${PREVIOUS_STAGE_INDEX}]}"        
+            rm -f "${OUTPUT_FILES[${PREVIOUS_STAGE_INDEX}]}"
+        fi
+        
         # Check elapsed time and exit if 30 minutes have passed
         ELAPSED=$(( $(date +%s) - $JOB_START ))
         if [ $ELAPSED -gt 1800 ]; then
@@ -88,10 +95,6 @@ for stage in NanoAOD MiniAOD RECO HLT DIGI SIM GEN; do
             exit 0
         fi
         
-        if [ ! "$stage" == "GEN" ]; then
-            echo "Delete the input file for this stage ${OUTPUT_FILES[${PREVIOUS_STAGE_INDEX}]}"        
-            rm -f "${OUTPUT_FILES[${PREVIOUS_STAGE_INDEX}]}"
-        fi
         break
     else
         echo "Skipping stage: $stage (input file ${OUTPUT_FILES[${PREVIOUS_STAGE_INDEX}]} doesnt exist)"
